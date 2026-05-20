@@ -1,0 +1,37 @@
+body {
+    background-color: #F3F4F6;
+    font-family: 'Inter', sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #1E293B;
+}
+
+.sidebar .nav-link {
+    color: #CBD5E1;
+    font-size: 16px;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    background-color: #2563EB;
+    color: white;
+    border-radius: 8px;
+}
+
+.main-content {
+    background-color: #F3F4F6;
+}
+
+.dashboard-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    color: #2563EB;
+    font-weight: bold;
+}
