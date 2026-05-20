@@ -1,21 +1,42 @@
+<!-- templates/dashboard.html -->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <title>Executive Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Executive Intelligence Dashboard</title>
 
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
+
     <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!-- Chart.js -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!--Calender-->
+
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css' rel='stylesheet' />
+
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 
 </head>
 
@@ -27,31 +48,51 @@
 
     <div class="sidebar p-3">
 
-        <h3 class="text-white mb-4">ExecIntel</h3>
+        <h3 class="logo mb-4">
+            ExecIntel
+        </h3>
 
         <ul class="nav flex-column">
 
-            <li class="nav-item mb-3">
-                <a class="nav-link active" href="#">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link active-link">
+                    <i class="bi bi-speedometer2"></i>
+                    Dashboard
                 </a>
             </li>
 
-            <li class="nav-item mb-3">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-people"></i> Executives
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-people"></i>
+                    Executives
                 </a>
             </li>
 
-            <li class="nav-item mb-3">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-building"></i> Companies
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-building"></i>
+                    Companies
                 </a>
             </li>
 
-            <li class="nav-item mb-3">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-graph-up"></i> Reports
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-telephone"></i>
+                    Outreach
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Reports
+                </a>
+            </li>
+
+            <li class="nav-item mb-2">
+                <a href="#" class="nav-link">
+                    <i class="bi bi-gear"></i>
+                    Settings
                 </a>
             </li>
 
@@ -61,90 +102,340 @@
 
     <!-- MAIN CONTENT -->
 
-    <div class="main-content w-100">
+    <div class="main-content flex-grow-1">
 
         <!-- NAVBAR -->
 
-        <nav class="navbar navbar-light bg-white shadow-sm px-4">
+        <nav class="navbar navbar-expand-lg top-navbar px-4">
 
-            <h4>Executive Intelligence Dashboard</h4>
+            <div class="container-fluid">
 
-            <div>
-                <i class="bi bi-bell fs-5 me-3"></i>
-                <i class="bi bi-person-circle fs-4"></i>
+                <h4 class="dashboard-title">
+                    Executive Intelligence Dashboard
+                </h4>
+
+                <div class="d-flex align-items-center">
+
+                    <!-- Search -->
+
+                    <div class="search-box me-3">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                        placeholder="Search executives...">
+
+                    </div>
+
+                    <!-- Notification -->
+
+                    <i class="bi bi-bell-fill nav-icon me-3"></i>
+
+                    <!-- Profile -->
+
+                    <i class="bi bi-person-circle profile-icon"></i>
+
+                </div>
+
             </div>
 
         </nav>
 
         <!-- DASHBOARD CONTENT -->
 
-        <div class="container-fluid p-4">
+        <div class="container-fluid p-3">
+            <div class="dashboard-overview mb-4">
+                <h3 class="overview-title">
+                    Executive Intelligence Overview
+                </h3>
+                <p class="overview-text">
+                    This dashboard provides a comprehensive overview of companies,
+        executives, sector distribution, and outreach analytics.
+        It helps users monitor executive intelligence data,
+        analyze business sectors, and track company information efficiently.
+                </p>
+                </div>
 
-            <!-- CARDS -->
+            <!-- KPI CARDS -->
 
             <div class="row g-4">
 
                 <div class="col-lg-3 col-md-6">
+
                     <div class="card dashboard-card">
-                        <div class="card-body">
-                            <h6>Total Companies</h6>
-                            <h2>{{ stats.companies }}</h2>
+
+                        <div class="card-body p-3">
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h6 class="card-title">
+                                        Total Companies
+                                    </h6>
+
+                                    <h2 class="card-value">
+                                        {{ stats.companies }}
+                                    </h2>
+                                </div>
+
+                                <div class="icon-box">
+                                    <i class="bi bi-building"></i>
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="col-lg-3 col-md-6">
+
                     <div class="card dashboard-card">
+
                         <div class="card-body">
-                            <h6>Total Executives</h6>
-                            <h2>{{ stats.executives }}</h2>
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h6 class="card-title">
+                                        Total Executives
+                                    </h6>
+
+                                    <h2 class="card-value">
+                                        {{ stats.executives }}
+                                    </h2>
+                                </div>
+
+                                <div class="icon-box">
+                                    <i class="bi bi-people"></i>
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="col-lg-3 col-md-6">
+
                     <div class="card dashboard-card">
+
                         <div class="card-body">
-                            <h6>Total Sectors</h6>
-                            <h2>{{ stats.sectors }}</h2>
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h6 class="card-title">
+                                        Total Sectors
+                                    </h6>
+
+                                    <h2 class="card-value">
+                                        {{ stats.sectors }}
+                                    </h2>
+                                </div>
+
+                                <div class="icon-box">
+                                    <i class="bi bi-pie-chart"></i>
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
                 <div class="col-lg-3 col-md-6">
+
                     <div class="card dashboard-card">
+
                         <div class="card-body">
-                            <h6>Contacted Executives</h6>
-                            <h2>{{ stats.contacted }}</h2>
+
+                            <div class="d-flex justify-content-between">
+
+                                <div>
+                                    <h6 class="card-title">
+                                        Contacted Executives
+                                    </h6>
+
+                                    <h2 class="card-value">
+                                        {{ stats.contacted }}
+                                    </h2>
+                                </div>
+
+                                <div class="icon-box">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
 
             </div>
 
             <!-- CHARTS -->
 
-            <div class="row mt-5">
+            <div class="row mt-4">
+
+                <!-- Doughnut Chart -->
 
                 <div class="col-lg-6 mb-4">
 
-                    <div class="card p-3">
+                    <div class="card chart-card">
 
-                        <h5>Sector Distribution</h5>
+                        <div class="card-body">
 
-                        <canvas id="sectorChart"></canvas>
+                            <h5 class="chart-title">
+                                Sector Distribution
+                            </h5>
+                            <p class="chart-description">
+
+    This chart represents the distribution of companies
+    across different business sectors, helping users
+    analyze sector-wise company presence and market trends.
+
+</p>
+
+                            <canvas id="sectorChart" height="150"></canvas>
+
+                        </div>
 
                     </div>
 
                 </div>
 
+                <!-- Bar Chart -->
+
                 <div class="col-lg-6 mb-4">
 
-                    <div class="card p-3">
+                    <div class="card chart-card">
 
-                        <h5>Industry Distribution</h5>
+                        <div class="card-body">
 
-                        <canvas id="industryChart"></canvas>
+                            <h5 class="chart-title">
+                                Industry Distribution
+                            </h5>
+                            <p class="chart-description">
+
+    This chart displays the number of companies
+    across various industries, providing insights
+    into industry-wise business distribution and analytics.
+
+</p>
+
+                            <canvas id="industryChart" height="150"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACTIVITY CALENDAR -->
+
+<div class="card calendar-card mt-4">
+
+    <div class="card-body">
+
+        <h5 class="calendar-title">
+            Activity Calendar
+        </h5>
+
+        <p class="calendar-description">
+
+            Track executive outreach activities,
+            meetings, follow-ups, and business interactions.
+
+        </p>
+
+        <div id="calendar"></div>
+
+    </div>
+
+</div>
+
+            <!-- RECENT EXECUTIVES TABLE -->
+
+            <div class="card table-card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h5 class="table-title">
+                            Recent Executives
+                        </h5>
+
+                        <button class="btn btn-primary">
+                            View All
+                        </button>
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                                <tr>
+                                    <th>Executive</th>
+                                    <th>Company</th>
+                                    <th>Sector</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td>Satya Nadella</td>
+                                    <td>Microsoft</td>
+                                    <td>Technology</td>
+                                    <td>
+                                        <span class="badge bg-success">
+                                            Contacted
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Elon Musk</td>
+                                    <td>Tesla</td>
+                                    <td>Automotive</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            Follow-up
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Sundar Pichai</td>
+                                    <td>Google</td>
+                                    <td>Technology</td>
+                                    <td>
+                                        <span class="badge bg-danger">
+                                            Not Contacted
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
 
                     </div>
 
@@ -158,36 +449,131 @@
 
 </div>
 
+<!-- CHART JS -->
+
 <script>
 
-    // Sector Chart
+    // DOUGHNUT CHART
 
     const sectorCtx = document.getElementById('sectorChart');
 
     new Chart(sectorCtx, {
+
         type: 'doughnut',
+
         data: {
-            labels: ['IT', 'Finance', 'Healthcare', 'Retail'],
+
+            labels: ['Technology', 'Finance', 'Healthcare', 'Retail'],
+
             datasets: [{
-                data: [35, 25, 20, 20]
+
+                data: [35, 25, 20, 20],
+
+                backgroundColor: [
+                    '#2563EB',
+                    '#3B82F6',
+                    '#60A5FA',
+                    '#93C5FD'
+                ],
+
+                borderWidth: 0
+
             }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+                    position: 'bottom'
+                }
+
+            }
+
         }
+
     });
 
-    // Industry Chart
+    // BAR CHART
 
     const industryCtx = document.getElementById('industryChart');
 
     new Chart(industryCtx, {
+
         type: 'bar',
+
         data: {
-            labels: ['Software', 'Banking', 'Pharma', 'Ecommerce'],
+
+            labels: ['Software', 'Banking', 'Pharma', 'E-commerce'],
+
             datasets: [{
+
                 label: 'Companies',
-                data: [120, 90, 70, 60]
+
+                data: [120, 90, 70, 60],
+
+                backgroundColor: '#2563EB',
+
+                borderRadius: 6
+
             }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+                    beginAtZero: true
+                }
+
+            }
+
         }
+
     });
+
+    // CALENDAR
+
+document.addEventListener('DOMContentLoaded', function () { 
+
+    const calendarEl = document.getElementById('calendar');
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+
+        initialView: 'dayGridMonth',
+
+        height: 350,
+
+        events: [
+
+            {
+                title: 'Executive Meeting',
+                start: '2026-05-20'
+            },
+
+            {
+                title: 'Follow-up Call',
+                start: '2026-05-22'
+            },
+
+            {
+                title: 'Investor Outreach',
+                start: '2026-05-25'
+            }
+
+        ]
+
+    });
+
+    calendar.render();
+
+});
 
 </script>
 
