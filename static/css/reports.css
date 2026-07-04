@@ -1,0 +1,122 @@
+/* REPORTS HERO CARD */
+.reports-hero{
+    background:white;
+    padding:60px 40px;
+    border-radius:30px;
+    margin-bottom:40px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+/* HEADER */
+.reports-header h1{
+    font-size:64px;
+    font-weight:800;
+    color:#0F172A;
+    margin-bottom:20px;
+}
+.reports-header p{
+    font-size:24px;
+    color:#64748B;
+    max-width:850px;
+    margin:auto;
+    line-height:1.7;
+}
+.reports-header h1{
+    font-size:48px;
+    font-weight:700;
+    color:#0F172A;
+}
+.reports-header p{
+    color:#64748B;
+    font-size:18px;
+}
+/* REPORT CARDS */
+.report-card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+.report-card h5{
+    color:#64748B;
+    margin-bottom:15px;
+}
+.report-card h2{
+    font-size:42px;
+    font-weight:700;
+    color:#2563EB;
+}
+/* CHART */
+.chart-card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    min-height:500px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+/* TABLE */
+.table-card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+}
+@media(max-width:768px){
+    .reports-hero{
+        padding:40px 20px;
+    }
+    .reports-header h1{
+        font-size:48px;
+    }
+    .reports-header p{
+        font-size:18px;
+    }
+}
+#statusChart{
+    max-width:700px;
+    max-height:500px;
+    margin:auto;
+}
+.custom-legend{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:25px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.custom-legend span{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:16px;
+    font-weight:500;
+}
+
+.legend-blue,
+.legend-red,
+.legend-orange,
+.legend-yellow{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.legend-blue{
+    background:#36A2EB;
+}
+
+.legend-red{
+    background:#FF6384;
+}
+
+.legend-orange{
+    background:#FF9F40;
+}
+
+.legend-yellow{
+    background:#FFCD56;
+}

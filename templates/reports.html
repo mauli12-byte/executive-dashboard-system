@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet"
+href="{{url_for(
+    'static',
+    filename='css/reports.css'
+)}}">
+<div class="container-fluid p-4">
+    <!-- HEADER -->
+     <div class="reports-hero">
+    <div class="reports-header text-center">
+        <h1>
+            Reports & Analytics
+        </h1>
+        <p>
+            Gain real-time insights into executives outreach, company engagement, follow-up activities, and sector-wise business analytics through this intelligent reporting dashboard. 
+        </p>
+    </div>
+    </div>
+    <!-- ANALYTICS CARDS -->
+    <div class="row g-4">
+        <div class="col-6 col-md-3">
+            <div class="report-card">
+                <h5>Total Contacted</h5>
+                <h2>
+                    {{total_contacted}}
+                </h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="report-card">
+                <h5>Interested</h5>
+                <h2>
+                    {{interested_count}}
+                </h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="report-card">
+                <h5>Rejected</h5>
+                <h2>
+                    {{rejected_count}}
+                </h2>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="report-card">
+                <h5>Follow-Ups</h5>
+                <h2>
+                    {{followup_count}}
+                </h2>
+            </div>
+        </div>
+    </div>
+    <!-- PIE CHART -->
+    <div class="chart-card mt-5">
+        <h3>
+            Outreach Status Distribution
+        </h3>
+        <canvas id="statusChart">
+        </canvas>
+        <div class="custom-legend">
+
+    <span>
+        <i class="legend-blue"></i>
+        Interested
+    </span>
+
+    <span>
+        <i class="legend-red"></i>
+        Rejected
+    </span>
+
+    <span>
+        <i class="legend-orange"></i>
+        Follow-Up Pending
+    </span>
+
+    <span>
+        <i class="legend-yellow"></i>
+        Contacted
+    </span>
+
+</div>
+    </div>
+    <!-- RECENT ACTIVITIES -->
+    <div class="table-card mt-5">
+        <h3>
+            Recent Outreach Activities
+        </h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Executive</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in recent_records %}
+                <tr>
+                    <td>
+                        {{record.executive_name}}
+                    </td>
+                    <td>
+                        {{record.company}}
+                    </td>
+                    <td>
+                        {{record.status}}
+                    </td>
+                    <td>
+                        {{record.updated_at.strftime(
+                            '%d %b %Y'
+                        )}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const statusCtx = document.getElementById(
+    'statusChart'
+);
+new Chart(statusCtx, {
+    type:'pie',
+    data:{
+        labels:
+        {{status_labels|tojson}},
+        datasets:[{
+            data:
+            {{status_counts|tojson}}
+        }]
+    },
+    options:{
+        responsive:true,
+        plugins:{
+            legend:{
+                display:false,
+                position:'bottom',
+                labels:{
+                    usePointStyle:true,
+                    padding:25,
+                    boxWidth:12,
+                    font:{
+                        size:14
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

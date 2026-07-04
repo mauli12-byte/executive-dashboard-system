@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/executives.css') }}">
+
+<!-- Custom Yes/No Dialog -->
+<div id="confirmOverlay" style="display:none; position:fixed; top:0; left:0;
+     width:100%; height:100%; background:rgba(0,0,0,0.5);
+     z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:16px; padding:32px 28px;
+                max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3);
+                text-align:center;">
+        <div style="font-size:40px; margin-bottom:16px;">🖨️</div>
+        <h5 style="font-weight:700; color:#0F172A; margin-bottom:10px;" id="dialogTitle">
+            Already Printed
+        </h5>
+        <p style="color:#64748B; font-size:14px; margin-bottom:24px; line-height:1.6;"
+           id="dialogMsg">
+            This executive has already been printed.<br>
+            Do you want to print again?
+        </p>
+        <div style="display:flex; gap:12px; justify-content:center;">
+            <button id="dialogNo"
+                style="flex:1; padding:10px 20px; border-radius:10px;
+                       border:1.5px solid #CBD5E1; background:white;
+                       color:#64748B; font-weight:600; font-size:14px;
+                       cursor:pointer;">
+                No, Cancel
+            </button>
+            <button id="dialogYes"
+                style="flex:1; padding:10px 20px; border-radius:10px;
+                       border:none; background:#2563EB;
+                       color:white; font-weight:600; font-size:14px;
+                       cursor:pointer;">
+                Yes, Print Again
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="executives-container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- FILTERS -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body py-3">
+            <form method="GET" action="/executives">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" name="search" class="form-control"
+                            placeholder="Search by Executive, Company, Sector, Industry..."
+                            value="{{ search_query }}">
+                    </div>
+                    <div class="col-md-4">
+                        <select name="sector" class="form-select">
+                            <option value="">All Sectors</option>
+                            {% for s in sectors %}
+                                {% if s[0] %}
+                                <option value="{{ s[0] }}" {% if sector_filter == s[0].lower() %}selected{% endif %}>{{ s[0] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="title" class="form-select">
+                            <option value="">All Titles</option>
+                            {% for t in titles %}
+                                {% if t[0] %}
+                                <option value="{{ t[0] }}" {% if title_filter == t[0].lower() %}selected{% endif %}>{{ t[0] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="industry" class="form-select">
+                            <option value="">All Industries</option>
+                            {% for i in industries %}
+                                {% if i[0] %}
+                                <option value="{{ i[0] }}" {% if industry_filter == i[0].lower() %}selected{% endif %}>{{ i[0] }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="Contacted"         {% if status_filter=="contacted" %}selected{% endif %}>Contacted</option>
+                            <option value="Non Contacted"     {% if status_filter=="non contacted" %}selected{% endif %}>Non Contacted</option>
+                            <option value="Follow-up Pending" {% if status_filter=="follow-up pending" %}selected{% endif %}>Follow-Up Pending</option>
+                            <option value="Interested"        {% if status_filter=="interested" %}selected{% endif %}>Interested</option>
+                            <option value="Rejected"          {% if status_filter=="rejected" %}selected{% endif %}>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex gap-2 align-items-center">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a href="/executives" class="btn btn-danger">Clear Filter</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="executives-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="exec-table-title">Executive Records</h5>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-success"
+                        onclick="openLabels()">
+                    <i class="bi bi-printer"></i> Print Selected
+                </button>
+                <a href="/add-executive"
+                   class="btn btn-warning">
+                     <i class="bi bi-plus-circle"></i>
+                     Add Executive
+                </a>
+
+                <a href="/website-validation" class="btn btn-primary">Website Validation</a>
+            </div>
+        </div>
+
+        <form method="POST" action="/print-executives" id="printForm"></form>
+
+        <div class="table-responsive">
+            <table class="executives-table">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Executive Name</th>
+                        <th>Title</th>
+                        <th>Company</th>
+                        <th>Sector</th>
+                        <th>Industry</th>
+                        <th>Website</th>
+                        <th>Status</th>
+                        <th>Print Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for executive in executives %}
+                    <tr>
+                        <td>
+                            <input type="checkbox"
+                                class="executive-checkbox"
+                                data-id="{{ executive.ExecutiveID }}"
+                                data-printed="{{ 'yes' if executive.Printed and executive.PrintCount and executive.PrintCount > 0 else 'no' }}"
+                                style="width:18px;height:18px;cursor:pointer;">
+                        </td>
+                        <td>
+                            <a href="/profile/{{ executive.ExecutiveID }}" class="exec-name-link">
+                                {{ executive.Name }}
+                            </a>
+                        </td>
+                        <td>{{ executive.Title }}</td>
+                        <td>{{ executive.company_name }}</td>
+                        <td>{{ executive.sector_name }}</td>
+                        <td>{{ executive.industry_name }}</td>
+                        <td>
+                            {% if executive.website_name %}
+                            <a href="{{ executive.website_name }}" target="_blank" class="website-link">Visit Website</a>
+                            {% else %}
+                            <span class="badge bg-danger">Not Available</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/outreach/{{ executive.ExecutiveID }}" class="outreach-btn">
+                                {% if executive.current_status == "Interested" %}
+                                    <span class="badge bg-success">{{ executive.current_status }}</span>
+                                {% elif executive.current_status == "Follow-Up Pending" %}
+                                    <span class="badge bg-warning text-dark">{{ executive.current_status }}</span>
+                                {% elif executive.current_status == "Rejected" %}
+                                    <span class="badge bg-danger">{{ executive.current_status }}</span>
+                                {% elif executive.current_status == "Contacted" %}
+                                    <span class="badge bg-primary">{{ executive.current_status }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Non Contacted</span>
+                                {% endif %}
+                            </a>
+                        </td>
+
+                        <!-- PRINT STATUS -->
+                        <td>
+                            {% if executive.Printed and executive.PrintCount and executive.PrintCount > 0 %}
+                                <span class="print-badge print-done"
+                                      id="ps-{{ executive.ExecutiveID }}">
+                                    <i class="bi bi-printer-fill"></i> Printed
+                                </span>
+                            {% else %}
+                                <span class="print-badge print-pending"
+                                      id="ps-{{ executive.ExecutiveID }}">
+                                    <i class="bi bi-circle"></i> Not Selected
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination-container">
+            {% if page > 1 %}
+            <a class="page-btn" href="?page={{ page-1 }}&search={{ search_query }}&sector={{ sector_filter }}&industry={{ industry_filter }}&title={{ title_filter }}&status={{ status_filter }}">Prev</a>
+            {% endif %}
+            {% for p in range(1, total_pages+1) %}
+                {% if p >= page-2 and p <= page+2 %}
+                    {% if p == page %}
+                        <span class="page-btn active-page">{{ p }}</span>
+                    {% else %}
+                        <a class="page-btn" href="?page={{ p }}&search={{ search_query }}&sector={{ sector_filter }}&industry={{ industry_filter }}&title={{ title_filter }}&status={{ status_filter }}">{{ p }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if page < total_pages %}
+            <a class="page-btn" href="?page={{ page+1 }}&search={{ search_query }}&sector={{ sector_filter }}&industry={{ industry_filter }}&title={{ title_filter }}&status={{ status_filter }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+var selectedIds = new Set();
+
+// Custom Yes/No Dialog 
+function showDialog(title, message) {
+    return new Promise(function(resolve) {
+        document.getElementById("dialogTitle").textContent = title;
+        document.getElementById("dialogMsg").innerHTML    = message;
+
+        var overlay = document.getElementById("confirmOverlay");
+        overlay.style.display = "flex";
+
+        document.getElementById("dialogYes").onclick = function() {
+            overlay.style.display = "none";
+            resolve(true);
+        };
+        document.getElementById("dialogNo").onclick = function() {
+            overlay.style.display = "none";
+            resolve(false);
+        };
+    });
+}
+
+//Checkbox change
+document.querySelectorAll(".executive-checkbox").forEach(function(cb) {
+    cb.addEventListener("change", async function() {
+        const execId    = this.dataset.id;
+        const badge     = document.getElementById("ps-" + execId);
+        const isPrinted = this.dataset.printed === "yes";
+
+        if (this.checked) {
+            // Already printed — show custom dialog 
+            if (isPrinted) {
+                const yes = await showDialog(
+                    "Already Printed",
+                    "This executive has already been printed.<br>Do you want to print again?"
+                );
+                if (!yes) {
+                    this.checked = false;
+                    return;
+                }
+            }
+            // show selected badge
+            selectedIds.add(execId);
+            badge.className = "print-badge print-selected";
+            badge.innerHTML = '<i class="bi bi-check2-circle"></i> Selected';
+
+        } else {
+            // Uncheck — again original state
+            selectedIds.delete(execId);
+            if (isPrinted) {
+                badge.className = "print-badge print-done";
+                badge.innerHTML = '<i class="bi bi-printer-fill"></i> Printed';
+            } else {
+                badge.className = "print-badge print-pending";
+                badge.innerHTML = '<i class="bi bi-circle"></i> Not Selected';
+            }
+        }
+    });
+});
+
+//Print Selected 
+function openLabels() {
+    if (selectedIds.size === 0) {
+        showDialog(
+            "No Executives Selected",
+            "Please select at least one executive before printing."
+        );
+        return;
+    }
+
+    // Show the selected badges in "Printed" state
+    selectedIds.forEach(function(id) {
+        var badge = document.getElementById("ps-" + id);
+        if (badge) {
+            badge.className = "print-badge print-done";
+            badge.innerHTML = '<i class="bi bi-printer-fill"></i> Printed';
+        }
+    });
+
+    // Form submit
+    var form = document.getElementById("printForm");
+    form.innerHTML = "";
+    selectedIds.forEach(function(id) {
+        var input   = document.createElement("input");
+        input.type  = "hidden";
+        input.name  = "executive_ids";
+        input.value = id;
+        form.appendChild(input);
+    });
+    form.submit();
+}
+</script>
+
+{% endblock %}

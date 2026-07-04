@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<div class="profile-container">
+
+    <!-- TOP SECTION -->
+    <div class="top-section">
+
+        <!-- LEFT PROFILE CARD -->
+        <div class="profile-card">
+            <div class="profile-initial">
+                {{ executive.Name[0] }}
+            </div>
+            <h1 class="executive-name">
+                {{ executive.Name }}
+            </h1>
+            <p class="executive-title">
+                {{ executive.Title }}
+            </p>
+        </div>
+
+        <!-- RIGHT BANNER -->
+        <div class="profile-banner">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="Banner">
+        </div>
+    </div>
+
+    <!-- BOTTOM SECTION -->
+    <div class="bottom-section">
+
+        <!-- EXECUTIVE INFO -->
+        <div class="info-card">
+            <h2>
+                Executive Information
+            </h2>
+            <div class="info-item">
+                <strong>Name:</strong>
+                {{ executive.Name }}
+            </div>
+            <div class="info-item">
+                <strong>Title:</strong>
+                {{ executive.Title }}
+            </div>
+            <div class="info-item">
+                <strong>Pay:</strong>
+                {% if executive.Pay %}
+                {{executive.Pay}}
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+
+            </div>
+            <div class="info-item">
+                <strong>Year Born:</strong>
+                {{ executive.YearBorn }}
+            </div>
+            <div class="info-item">
+                <strong>Executive LinkedInURL:</strong>
+                {% if executive.LinkedInURL and executive.LinkedInURL != "Not Found" %}
+                    <a href="{{executive.LinkedInURL}}"
+                        target="_blank">
+                         Open LinkedIn Profile
+                    </a>
+                {% else %}
+                    <span class="badge bg-secondary">Not Available</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- COMPANY INFO -->
+        <div class="info-card">
+            <h2>
+                Company Information
+            </h2>
+            <div class="info-item">
+                <strong>Founded year:</strong>
+                {% if company_data.foundedyear %}
+                {{company_data.foundedyear}}
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+            </div>
+            <div class="info-item">
+                <strong>Headquarters:</strong>
+                {% if company_data.headquarters %}
+                {{company_data.headquarters}}
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+            </div>
+            <div class="info-item">
+                <strong>Company:</strong>
+                {{ company_data.CompanyName }}
+            </div>
+            <div class="info-item">
+                <strong>Sector:</strong>
+                {{ company_data.Sector }}
+            </div>
+            <div class="info-item">
+                <strong>Industry:</strong>
+                {{ company_data.Industry }}
+            </div>
+            <div class="info-item">
+                <strong>Website:</strong>
+                {% if company_data.Website %}
+                <a href="{{company_data.Website}}" target="_blank" class="website-link">
+                    Visit Website
+                </a>
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+            </div>
+            <div class="info-item">
+                <strong>Phone:</strong>
+                {% if company_data.Phone %}
+                {{company_data.Phone}}
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+            </div>
+            <div class="info-item">
+                <strong>Address:</strong>
+                {{ company_data.Address }}
+            </div>
+            <div class="info-item">
+                <strong>Description:</strong>
+                {{ company_data.Description }}
+            </div>
+            <div class="info-item">
+                <strong>Yahoo Finance:</strong>
+                <a href="{{ company_data.yahooFinanceURL}}" target="_blank" class="yahoo-link">
+                    View Finance
+                </a>
+            </div>
+            <div class="info-item">
+                <strong>Company LinkedInURL:</strong>
+                {% if company_data.LinkedInURL
+                    and company_data.LinkedInURL != "Not Found" %}
+                    <a href="{{company_data.LinkedInURL}}"
+                        target="_blank">
+                         Open Company LinkedIn
+                    </a>
+                {% else %}
+                    <span class="badge bg-secondary">Not Available</span>
+                {% endif %}
+            </div>
+            <div class="info-item">
+                <strong>Employee Count:</strong>
+                {% if company_data.employeecount %}
+                {{company_data.employeecount}}
+                {% else %}
+                <span class="badge bg-secondary">
+                    Not Available
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!--Recent Company News-->
+        <div class="info-card" style="grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="margin:0;">
+                     Recent Company News
+                </h2>
+                <button type="button"
+                        id="fetchNewsBtn"
+                        onclick="fetchLatestNews({{ company_data.CompanyID }})"
+                        style="background:#2563EB; color:white; border:none;
+                               padding:8px 16px; border-radius:8px;
+                               font-size:13px; font-weight:600; cursor:pointer;">
+                     Get Latest News
+                </button>
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="newsLoading" style="display:none; text-align:center; padding:16px;">
+                <p style="color:#64748B; font-size:13px;">
+                    Fetching latest news from Google... (5-10 seconds)
+                </p>
+            </div>
+
+            <!-- News list -->
+            <div id="newsListContainer" style="margin-top:12px;">
+                {% if company_news %}
+                    {% for news in company_news %}
+                    <div class="info-item" style="display:block;">
+                        <a href="{{ news.ArticleURL }}" target="_blank"
+                           style="font-weight:600; color:#1D4ED8; text-decoration:none;">
+                            {{ news.NewsHeadline }}
+                        </a>
+                        <div style="font-size:12px; color:#94A3B8; margin-top:4px;">
+                            {% if news.NewsSource %}{{ news.NewsSource }} &nbsp;|&nbsp;{% endif %}
+                            Fetched: {{ news.FetchedAt.strftime('%d %b %Y, %I:%M %p') if news.FetchedAt else '' }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:#94A3B8; text-align:center; padding:16px;">
+                        No news fetched yet. Click "Get Latest News" to fetch.
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function fetchLatestNews(companyId) {
+    const btn     = document.getElementById("fetchNewsBtn");
+    const loading = document.getElementById("newsLoading");
+
+    btn.disabled = true;
+    btn.innerHTML = " Fetching...";
+    loading.style.display = "block";
+
+    fetch(`/fetch-company-news/${companyId}`, {
+        method: "POST"
+    })
+    .then(r => r.json())
+    .then(function(data) {
+        loading.style.display = "none";
+        btn.disabled = false;
+        btn.innerHTML = " Get Latest News";
+
+        if (data.status === "ok") {
+            alert(data.saved + " new article(s) added (" + data.found + " found total).");
+            window.location.reload();
+        } else if (data.status === "captcha") {
+            alert("Google CAPTCHA aa gaya. Thodi der baad try karo.");
+        } else {
+            alert("Error: " + (data.message || "Could not fetch news"));
+        }
+    })
+    .catch(function(err) {
+        loading.style.display = "none";
+        btn.disabled = false;
+        btn.innerHTML = " Get Latest News";
+        alert("Request failed: " + err);
+    });
+}
+</script>
+{% endblock %}

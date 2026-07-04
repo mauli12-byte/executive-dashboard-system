@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for(
+    'static',
+    filename='css/outreach.css'
+)}}">
+
+<div class="outreach-logs-container">
+
+    <!-- HEADER -->
+    <div class="dashboard-overview mb-4 text-center">
+        <div class="page-header text-center">
+            <h1 class="outreach-title">Outreach Logs</h1>
+            <p class="outreach-text">
+                Track all outreach communication history,
+                follow-up schedules, interested executives,
+                and business engagement activities through
+                this outreach management system.
+            </p>
+        </div>
+    </div>
+
+    <!-- TABLE CARD — same style as executives & companies -->
+    <div class="logs-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="logs-table-title">All Outreach Records</h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Executive</th>
+                        <th>Company</th>
+                        <th>Status</th>
+                        <th>Last Contacted</th>
+                        <th>Follow-Up</th>
+                        <th>Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in records %}
+                    <tr>
+                        <td data-label="S.No">{{ loop.index }}</td>
+                        <td data-label="Executive">{{ record.executive_name }}</td>
+                        <td data-label="Company">{{ record.company }}</td>
+                        <td data-label="Status">
+                            <span class="status-badge
+                                {% if record.status == 'Interested' %}status-green
+                                {% elif record.status == 'Rejected' %}status-red
+                                {% elif record.status == 'Follow-Up Pending' %}status-orange
+                                {% elif record.status == 'Contacted' %}status-blue
+                                {% else %}status-gray{% endif %}">
+                                {{ record.status }}
+                            </span>
+                        </td>
+                        <td data-label="Last Contacted" class="date-text">
+                            {% if record.updated_at %}
+                            {{ record.updated_at.strftime('%d %b %Y, %I:%M %p') }}
+                            {% else %}--{% endif %}
+                        </td>
+                        <td data-label="Follow-Up" class="date-text">
+                            {% if record.followup_datetime %}
+                            {{ record.followup_datetime.replace('T', ' ') }}
+                            {% else %}--{% endif %}
+                        </td>
+                        <td data-label="Notes" class="notes-cell">{{ record.notes }}</td>
+                        <td data-label="Action">
+                            <a href="/delete-outreach/{{ record.id }}" class="delete-btn">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

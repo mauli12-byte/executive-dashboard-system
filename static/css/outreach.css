@@ -1,0 +1,485 @@
+/* PAGE */
+.outreach-container {
+    padding: 30px;
+}
+/* HEADER */
+.page-header {
+    margin-bottom: 30px;
+}
+.page-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #0F172A;
+}
+.page-header p {
+    color: #64748B;
+    margin-top: 8px;
+}
+/* FORM CARD */
+.form-card {
+    background: #FFFFFF;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-top: 40px;
+}
+/* FORM GRID */
+.form-grid {
+    display: flex;
+    /*grid-template-columns:1fr 1fr;*/
+    flex-direction: column;
+    gap: 28px;
+}
+/* FORM GROUP */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+/* LABELS */
+.form-group label {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #0F172A;
+}
+/* INPUTS */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 16px;
+    border: 1px solid #CBD5E1;
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+/* INPUT FOCUS */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+/* TEXTAREA */
+textarea {
+    resize: none;
+}
+/* BUTTON */
+.submit-btn {
+    margin-top: 30px;
+    background: #2563EB;
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.submit-btn:hover {
+    background: #1D4ED8;
+}
+/* MOBILE RESPONSIVE */
+@media(max-width:768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* EXECUTIVE HEADER */
+.executive-header {
+    background: #FFFFFF;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+/* AVATAR */
+.executive-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #2563EB;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+}
+/* DETAILS */
+.executive-details h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 6px;
+}
+.executive-details p {
+    color: #64748B;
+    font-size: 17px;
+    margin-bottom: 10px;
+}
+/* SECTOR BADGE */
+.executive-sector {
+    background: #DBEAFE;
+    color: #2563EB;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+#followup-group {
+    transition: 0.3s;
+}
+/*delete button*/
+.delete-btn {
+    background: #DC2626;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.delete-btn:hover {
+    background: #b91c1c;
+    color: white;
+}
+/* TABLE CARD*/
+.table-card {
+    background: #FFFFFF;
+    margin-top: 35px;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+/* TABLE */
+.outreach-table {
+    width: 100%;
+    min-width: 1400px;
+    border-collapse: collapse;
+}
+/* HEADER */
+.outreach-table th {
+    background: #F8FAFC;
+    color: #0F172A;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 18px;
+    text-align: left;
+    border-bottom: 2px solid #E2E8F0;
+}
+/* TABLE DATA */
+.outreach-table td {
+    padding: 22px 18px;
+    border-bottom: 1px solid #E2E8F0;
+    color: #334155;
+    font-size: 14px;
+    vertical-align: middle;
+}
+/* ROW HOVER */
+.outreach-table tr:hover {
+    background: #F8FAFC;
+}
+/* STATUS BADGES */
+.status-badge {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+}
+/* STATUS COLORS */
+.status-green {
+    background: #DCFCE7;
+    color: #15803D;
+}
+.status-red {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+.status-orange {
+    background: #FEF3C7;
+    color: #D97706;
+}
+.status-blue {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+.status-gray {
+    background: #E2E8F0;
+    color: #475569;
+}
+/* DELETE BUTTON */
+.delete-btn {
+    background: #DC2626;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.delete-btn:hover {
+    background: #B91C1C;
+    color: white;
+}
+.notes-cell {
+    max-width: 250px;
+    line-height: 1.6;
+}
+/* BOTTOM ROW */
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-top: 10px;
+}
+/* LAST CONTACT SECTION*/
+.last-contact-group {
+    width: 320px;
+}
+/* COLUMN WIDTHS */
+.outreach-table th:nth-child(1),
+.outreach-table td:nth-child(1) {
+    width: 70px;
+}
+.outreach-table th:nth-child(2),
+.outreach-table td:nth-child(2) {
+    width: 220px;
+}
+
+.outreach-table th:nth-child(3),
+.outreach-table td:nth-child(3) {
+    width: 220px;
+}
+
+.outreach-table th:nth-child(4),
+.outreach-table td:nth-child(4) {
+    width: 220px;
+}
+
+.outreach-table th:nth-child(5),
+.outreach-table td:nth-child(5) {
+    width: 300px;
+}
+
+.outreach-table th:nth-child(6),
+.outreach-table td:nth-child(6) {
+    width: 140px;
+}
+
+/* ACTION COLUMN */
+.outreach-table th:nth-child(8),
+.outreach-table td:nth-child(8) {
+    width: 140px;
+    text-align: center;
+}
+
+/* DATE FORMATTING */
+.date-text {
+    white-space: nowrap;
+    line-height: 1.6;
+}
+
+/* STATUS COLUMN */
+.status-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* STATUS DATE */
+.status-date {
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.5;
+}
+
+/* NOTES */
+.notes-cell {
+    line-height: 1.8;
+}
+
+/* DASHBOARD OVERVIEW */
+.dashboard-overview {
+    background: #FFFFFF;
+    padding: 35px 30px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* OUTREACH TITLE */
+.outreach-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 18px;
+}
+
+/* DESCRIPTION */
+.outreach-text {
+    color: #64748B;
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+/* MODERN CARD */
+.outreach-card {
+    border-radius: 22px;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+
+/* CARD BODY */
+.outreach-card .card-body {
+    padding: 10px;
+}
+
+/* TABLE HEADER */
+.outreach-table th {
+    background: #F8FAFC;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+/* TABLE DATA */
+.outreach-table td {
+    font-size: 15px;
+    color: #334155;
+}
+
+/* HOVER EFFECT */
+.outreach-table tbody tr:hover {
+    background: #F8FAFC;
+    transition: 0.2s ease;
+}
+
+/* =============================================
+   OUTREACH LOGS PAGE — APPEND AT END OF outreach.css
+   Sirf yeh block add karo — baaki CSS mat chhuo
+   Same style as executives & companies table
+============================================= */
+
+.outreach-logs-container {
+    padding: 20px;
+}
+
+/* TABLE CARD */
+.logs-card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    transform: none !important;
+    transition: none !important;
+}
+
+.logs-card:hover {
+    transform: none !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* TABLE TITLE */
+.logs-table-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0;
+}
+
+/* TABLE */
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
+}
+
+.logs-table thead {
+    background: #F8FAFC;
+}
+
+.logs-table th {
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 2px solid #E5E7EB;
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.logs-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 14px;
+    color: #374151;
+    vertical-align: middle;
+}
+
+/* NO ROW HOVER — same as executives & companies */
+.logs-table tbody tr:hover {
+    background: inherit !important;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+}
+
+/* NOTES COLUMN WIDTH */
+.logs-table .notes-cell {
+    max-width: 220px;
+    line-height: 1.6;
+    white-space: normal;
+}
+
+/* DATE TEXT */
+.logs-table .date-text {
+    white-space: nowrap;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .logs-table thead {
+        display: none;
+    }
+
+    .logs-table tr {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid #E5E7EB;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .logs-table td {
+        display: block;
+        text-align: right;
+        padding: 8px 12px;
+        border: none;
+        border-bottom: 1px solid #F1F5F9;
+    }
+
+    .logs-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 700;
+        color: #6B7280;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+}

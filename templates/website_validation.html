@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/website_validation.css') }}">
+
+<div class="companies-container">
+
+    <!-- FILTER CARD -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body py-3">
+            <form method="GET" action="/website-validation">
+                <div class="row g-3">
+
+                    <!-- Company Search -->
+                    <div class="col-md-4">
+                        <input type="text"
+                               name="company"
+                               class="form-control"
+                               placeholder="Search Company"
+                               value="{{ company_filter }}">
+                    </div>
+
+                    <!-- HTTPS Filter -->
+                    <div class="col-md-3">
+                        <select name="https" class="form-select">
+                            <option value="">HTTPS Status</option>
+                            <option value="1" {% if https_filter=="1" %}selected{% endif %}>
+                                HTTPS Available
+                            </option>
+                            <option value="0" {% if https_filter=="0" %}selected{% endif %}>
+                                HTTPS Not Available
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Website Availability Filter -->
+                    <div class="col-md-3">
+                        <select name="website" class="form-select">
+                            <option value="">All Websites</option>
+                            <option value="available" {% if website_filter=="available" %}selected{% endif %}>
+                                Website Available
+                            </option>
+                            <option value="not_available" {% if website_filter=="not_available" %}selected{% endif %}>
+                                Website Not Available
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-2 d-flex gap-2 align-items-center">
+                        <button type="submit" class="btn btn-primary">
+                            Apply
+                        </button>
+                        <a href="/website-validation" class="btn btn-danger">
+                            Clear
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="companies-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="companies-table-title">
+                Website Validation Records
+                <span style="font-size:13px; font-weight:500; color:#64748B; margin-left:6px;">
+                    ({{ total_records }} records)
+                </span>
+            </h5>
+        </div>
+
+        <div class="table-responsive">
+            <table class="companies-table">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Status Code</th>
+                        <th>HTTPS Available</th>
+                        <th>Validation Message</th>
+                        <th>Last Checked Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr>
+                        <td data-label="Company Name">{{ company.CompanyName }}</td>
+                        <td data-label="Status Code">
+                            {% if company.StatusCode == 200 %}
+                                <span class="badge bg-success">{{ company.StatusCode }}</span>
+                            {% elif company.StatusCode in [301, 302] %}
+                                <span class="badge bg-warning text-dark">{{ company.StatusCode }}</span>
+                            {% elif company.StatusCode %}
+                                <span class="badge bg-danger">{{ company.StatusCode }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">—</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="HTTPS Available">
+                            {% if company.HTTPSAvailable %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-danger">No</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Validation Message">
+                            {{ company.ValidationMessage or '—' }}
+                        </td>
+                        <td data-label="Last Checked Date">
+                            {% if company.LastCheckedDate %}
+                                {{ company.LastCheckedDate.strftime('%d %b %Y, %I:%M %p') }}
+                            {% else %}
+                                <span style="color:#94A3B8;">Not checked</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if not companies %}
+                    <tr>
+                        <td colspan="5" style="text-align:center; color:#94A3B8; padding:30px;">
+                            No records found
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination-container">
+
+            {% if page > 1 %}
+            <a class="page-btn"
+               href="?page={{ page-1 }}&company={{ company_filter }}&https={{ https_filter }}&website={{ website_filter }}">
+                Prev
+            </a>
+            {% endif %}
+
+            {% for p in range(1, total_pages+1) %}
+                {% if p >= page-2 and p <= page+2 %}
+                    {% if p == page %}
+                        <span class="page-btn active-page">{{ p }}</span>
+                    {% else %}
+                        <a class="page-btn"
+                           href="?page={{ p }}&company={{ company_filter }}&https={{ https_filter }}&website={{ website_filter }}">
+                            {{ p }}
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if page < total_pages %}
+            <a class="page-btn"
+               href="?page={{ page+1 }}&company={{ company_filter }}&https={{ https_filter }}&website={{ website_filter }}">
+                Next
+            </a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

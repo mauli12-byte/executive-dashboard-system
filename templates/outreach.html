@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet"
+href="{{url_for('static', filename='css/outreach.css')}}">
+<div class="outreach-container">
+    <!--page header-->
+    <div class="page-header">
+        <h1>
+            Outreach Management
+        </h1>
+        <p>
+            Track executive communication and follow-ups
+        </p>
+    </div>
+
+    <!-- EXECUTIVE HEADER -->
+<div class="executive-header">
+    <div class="executive-avatar">
+        {{ executive.Name[0] }}
+    </div>
+    <div class="executive-details">
+        <h1>
+            {{ executive.Name }}
+        </h1>
+        <p>
+            {{  company_data.CompanyName }}
+        </p>
+    </div>
+</div>
+
+    <!--form section-->
+    <div class="form-card">
+        <form method="POST"
+        action="/outreach/{{executive.ExecutiveID}}">
+            <div class="form-grid">
+                <!--status-->
+                <div class="form-group">
+                    <label>
+                        Status
+                    </label>
+                    <select name="status" id="status-select" required>
+                        <option value="">
+                            Select Status
+                        </option>
+                        <option value="Non Contacted">
+                            Non Contacted
+                        </option>
+
+                        <option value="Contacted">
+                            Contacted
+                        </option>
+                        <option value="Follow-Up Pending">
+                            Follow-Up Pending
+                        </option>
+                        <option value="Interested">
+                            Interested
+                        </option>
+                        <option value="Rejected">
+                            Rejected
+                        </option>
+                    </select>
+                </div>
+            
+                 <!--follow-up-->
+                <div class="form-group"
+                id="followup-group">
+                    <label>
+                        Follow-Up Date & Time
+                    </label>
+                    <input
+                    type="datetime-local"
+                    name="followup_datetime">
+                </div>
+            </div>
+            <!--notes-->
+            <div class="form-group">
+                <label>
+                    Notes
+                </label>
+                <textarea
+                name="notes"
+                rows="5"
+                placeholder="Add communication notes..."></textarea>
+            </div>
+            <!--bottom row-->
+            <button
+            type="submit"
+            class="submit-btn">
+        Save Outreach
+    </button>
+    </form>
+
+    </div>
+    <!--table section-->
+    <div class="table-card">
+        <table class="outreach-table">
+
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>Status</th>
+                    <th>Last Contacted Date & Time</th>
+                    <th>Follow-Up Date & Time</th>
+                    <th>Notes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in outreach_records %}
+                <tr>
+                    <!--Serial Number-->
+                    <td>
+                        {{loop.index}}
+                    </td>
+                    <!--Status-->
+                    <td>
+                        <!--<div class="status-wrapper">-->
+                        <span class="status-badge
+                        {%if record.status=='Interested'%}
+                        status-green
+                        {% elif record.status=='Rejected'%}
+                        status-red
+                        {%elif record.status=='Follow-Up Pending'%}
+                        status-orange
+                        {% elif record.status == 'Contacted'%}
+                        status-blue
+                        {%else%}
+                        status-gray
+                        {%endif%}">
+                            {{record.status}}
+                        </span>
+                        </td>
+                    
+                    <!--Contact Date-->
+                    <td class="date-text">
+                        {% if record.updated_at %}
+        {{ record.updated_at.strftime('%d %b %Y, %I:%M %p') }}
+    {% else %}
+        --
+    {% endif %}
+                    </td>
+                    <!--Follow-up-->     
+                    <td  class="date-text">
+                        {%if record.followup_datetime %}
+                        {{record.followup_datetime.replace('T',' ')}}
+                        {%else%}
+                        --
+                        {%endif%}
+                    </td>
+                    <!--Notes-->
+                    <td class="notes-cell">
+                        {{record.notes}}
+                    </td>
+                    <!--Action-->
+                    <td>
+                        <a href="/delete-outreach/{{record.id}}"
+                        class="delete-btn"
+                        onclick="return confirm(
+                            'Delete this outreach history?'
+                        )">
+                    Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    const statusSelect=
+    document.getElementById("status-select");
+    const followupGroup=
+    document.getElementById("followup-group");
+    function toggleFollowup(){
+        const selectedStatus=
+        statusSelect.value;
+        if(
+            selectedStatus === "Contacted"
+            ||
+            selectedStatus === "Follow-Up Pending"
+            ||
+            selectedStatus === "Interested"
+        ){
+            followupGroup.style.display="flex";
+        }
+        else{
+            followupGroup.style.display="none";
+        }
+    }
+    toggleFollowup();
+    statusSelect.addEventListener(
+        "change",
+        toggleFollowup
+    );
+</script>
+{% endblock %}

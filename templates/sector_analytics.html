@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-4">
+
+    <!-- HEADER -->
+    <div class="dashboard-overview text-center mb-4">
+
+        <h1 class="dashboard-main-title">
+            Sector Analytics
+        </h1>
+
+        <p class="dashboard-subtitle">
+            Dynamic visualization of total
+            companies present in each sector.
+        </p>
+
+    </div>
+
+    <!-- GRAPH -->
+    <div class="card chart-card">
+
+        <div class="card-body">
+
+            <canvas id="sectorBarChart"></canvas>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const sectorCtx=document.getElementById(
+        'sectorBarChart'
+
+    );
+    const labels={{sector_labels|tojson}};
+    const companyData={{company_counts|tojson}};
+    const executiveData={{executive_counts|tojson}};
+    new Chart(sectorCtx,{
+        type:'bar',
+        data:{
+            labels: labels,
+            datasets:[
+                {
+                    label:'Companies',
+                    data:companyData,
+                    backgroundColor: '#2563EB',
+                    borderRadius:10
+                },
+                {
+                    label:'Executives',
+                    data:executiveData,
+                    backgroundColor:'#60A5FA',
+                    borderRadius:10
+                }
+            ]
+        },
+        option:{
+            responsive:true,
+            maintainAspectRatio:false,
+            scales:{
+                y:{
+                    beginAtZero:true
+                }
+            }
+
+        }
+    });
+</script>
+
+{% endblock %}

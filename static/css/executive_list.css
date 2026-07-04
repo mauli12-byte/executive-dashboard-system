@@ -1,0 +1,54 @@
+/* MAIN */
+.executive-container{
+    padding:20px;
+}
+/* HEADER */
+.executive-header{
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    margin-bottom:25px;
+    box-shadow:0 2px 10px
+    rgba(0,0,0,0.05);
+}
+.executive-header h1{
+    font-size:34px;
+    font-weight:700;
+}
+/* CARD */
+.executive-card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 2px 10px
+    rgba(0,0,0,0.05);
+}
+/* TABLE */
+.executive-table{
+    width:100%;
+    border-collapse:collapse;
+}
+.executive-table th{
+    text-align:left;
+    padding:16px;
+    border-bottom:1px solid #E5E7EB;
+}
+.executive-table td{
+    padding:16px;
+    border-bottom:1px solid #E5E7EB;
+}
+/* TITLE */
+.executive-title{
+    font-size:34px;
+    font-weight:700;
+    color:#0F172A;
+    margin-bottom:15px;
+}
+/* DESCRIPTION */
+.executive-description{
+    color:#64748B;
+    font-size:17px;
+    line-height:1.7;
+    max-width:900px;
+    margin:0 auto;
+}

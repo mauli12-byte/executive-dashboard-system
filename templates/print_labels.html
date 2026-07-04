@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Executive Labels</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        /*Top bar */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-bar h6 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0F172A;
+            margin: 0;
+        }
+
+        .top-bar small {
+            color: #64748B;
+            font-size: 12px;
+        }
+
+        .btn-back {
+            background: #E2E8F0;
+            color: #334155;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Print Labels button*/
+        .btn-print-labels {
+            background: #1B5E20;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(27,94,32,0.3);
+        }
+
+        .btn-print-labels:hover {
+            background: #2E7D32;
+        }
+
+        .btn-print-labels .print-icon {
+            font-size: 18px;
+        }
+
+        /* Labels Grid */
+        .labels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        /* Single label */
+        .label {
+            background: linear-gradient(155deg, #FFFDE7 0%, #FFF9C4 40%, #F9FBE7 100%);
+            border: 2.5px solid #2E7D32;
+            border-radius: 12px;
+            padding: 14px 16px 10px;
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .label::after {
+            content: "";
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255,193,7,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .label > * { position: relative; z-index: 1; }
+
+        /* Label title */
+        .label-title {
+            text-align: center;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #1B5E20;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        /* Divider */
+        .label-divider {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        .label-divider::before, .label-divider::after {
+            content: "";
+            flex: 1;
+            height: 1.5px;
+            background: #2E7D32;
+        }
+        .label-divider span { color: #2E7D32; font-size: 9px; }
+
+        /* Field rows */
+        .field-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            gap: 6px;
+        }
+
+        .field-lbl {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #1B5E20;
+            min-width: 98px;
+            padding-top: 3px;
+            white-space: nowrap;
+        }
+
+        .field-val {
+            flex: 1;
+            border: 1px solid #81C784;
+            border-radius: 4px;
+            padding: 3px 6px;
+            font-size: 9.5px;
+            color: #1a1a1a;
+            background: rgba(255,255,255,0.6);
+            min-height: 22px;
+            line-height: 1.4;
+        }
+
+        .field-val.addr { min-height: 34px; }
+
+        /* Footer */
+        .label-footer {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 7.5px;
+            font-weight: 700;
+            color: #E65100;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        /*PRINT STYLES*/
+        @media print {
+            body { background: white; padding: 0; }
+            .top-bar { display: none !important; }
+
+            .labels-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5mm;
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .label {
+                border: 2pt solid #2E7D32;
+                border-radius: 4mm;
+                padding: 3.5mm 4.5mm;
+                min-height: 60mm;
+                break-inside: avoid;
+            }
+
+            .label-title  { font-size: 8pt; }
+            .field-lbl    { font-size: 7pt; min-width: 20mm; }
+            .field-val    { font-size: 7pt; padding: 1mm 2mm; }
+            .field-val.addr { min-height: 10mm; }
+            .label-footer { font-size: 6pt; }
+
+            @page {
+                size: A4 portrait;
+                margin: 8mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top bar-->
+    <div class="top-bar" id="topBar">
+        <div class="top-bar-left">
+            <a href="/executives" class="btn-back">← Back</a>
+            <div>
+                <h6>Executive Labels</h6>
+                <small>{{ executives|length }} label{{ 's' if executives|length != 1 }} ready to print</small>
+            </div>
+        </div>
+        <!-- Print Labels button-->
+        <button class="btn-print-labels" onclick="doPrint()" id="printBtn">
+            <span class="print-icon"></span>
+            Print Labels
+        </button>
+    </div>
+
+    <!-- Labels -->
+    <div class="labels-grid" id="labelsGrid">
+        {% for exec in executives %}
+        <div class="label">
+
+            <div class="field-row">
+                <div>{{ exec.Name }}
+                    {% if exec.label_title %}
+                    ({{exec.label_title}})
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div>{{ exec.company_name }},
+                    {{exec.address or ' '}}
+                </div>
+            </div>
+
+            {% if exec.exec_phone and exec.company_phone %}
+                <div class="field-row">
+                    <div>+{{ exec.exec_phone }}</div>
+                </div>
+                <div class="field-row">
+                    <div>+{{ exec.company_phone }}</div>
+                </div>
+            {% elif exec.exec_phone %}
+                <div class="field-row">
+                    <div>+{{ exec.exec_phone }}</div>
+                </div>
+            {% elif exec.company_phone %}
+                <div class="field-row">
+                    <div>+{{ exec.company_phone }}</div>
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- IDs -->
+    <div id="execIds" style="display:none">{{ exec_ids }}</div>
+
+    <script>
+        function doPrint(){
+                window.print();
+        }
+        window.onafterprint = function(){
+            const printed = confirm(
+                "Did the labels print successfully?\n\nClick Ok to update the print status and count.\n Click Cancel if printing was not completed."
+            );
+            if(!printed){
+                return;
+            }
+            const ids =
+                document.getElementById(
+                    "execIds"
+                ).innerText.trim();
+
+            fetch("/mark-printed",{
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+                body: JSON.stringify({
+                    ids:ids
+                })
+            }) 
+            .then(r => r.json())
+            .then(function(data) {
+
+                alert(
+                    "Print status updated successfully."
+                );
+
+                window.location.reload();
+
+            })
+            .catch(function(error){
+
+                alert(
+                    "Failed to update print status."
+                );
+
+            }); 
+
+        };
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Add Executive</h2>
+    <form method="POST" action="/add-executive" autocomplete="off">
+
+        <div class="card mb-4">
+            <div class="card-header">
+                Executive Information
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label>Executive Name *</label>
+                    <input type="text" name="executive_name" class="form-control"
+                           value="{{ form_data.executive_name if form_data else '' }}"
+                           autocomplete="off" required>
+                </div>
+                <div class="mb-3">
+                    <label>Title *</label>
+                    <input type="text" name="title" class="form-control"
+                           value="{{ form_data.title if form_data else '' }}"
+                           autocomplete="off" required>
+                </div>
+                <div class="mb-3">
+                    <label>Pay</label>
+                    <input type="number" name="pay" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label>Year Born</label>
+                    <input type="number" name="year_born" class="form-control"
+                           value="{{ form_data.year_born if form_data else '' }}"
+                           autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Company Information
+            </div>
+            <div class="card-body">
+
+                <!-- COMPANY NAME + AUTOCOMPLETE DROPDOWN -->
+                <div class="mb-3 position-relative">
+                    <label>Company Name *</label>
+                    <input type="text" id="company_name" name="company_name" class="form-control"
+                           value="{{ form_data.company_name if form_data else '' }}"
+                           autocomplete="off" required>
+                    <div id="company-suggestions" class="list-group position-absolute w-100"
+                         style="z-index: 1000; top: 100%; display: none; max-height: 220px; overflow-y: auto;">
+                    </div>
+                    <small class="text-muted" id="company-match-note" style="display:none;">
+                        Existing company selected — fields filled below.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label>Website</label>
+                    <input type="text" id="website" name="website" class="form-control"
+                           value="{{ form_data.website if form_data else '' }}"
+                           autocomplete="off">
+                </div>
+                <div class="mb-3">
+                    <label>Phone</label>
+                    <input type="text" id="phone" name="phone" class="form-control"
+                           value="{{ form_data.phone if form_data else '' }}"
+                           autocomplete="off">
+                </div>
+                <div class="mb-3">
+                    <label>Address</label>
+                    <textarea id="address" name="address" class="form-control"
+                              autocomplete="off">{{ form_data.address if form_data else '' }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-success">
+                Save Executive
+            </button>
+            <a href="/executives" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+(function () {
+    var companyInput   = document.getElementById('company_name');
+    var suggestionsBox = document.getElementById('company-suggestions');
+    var websiteInput   = document.getElementById('website');
+    var phoneInput     = document.getElementById('phone');
+    var addressInput   = document.getElementById('address');
+    var matchNote      = document.getElementById('company-match-note');
+
+    var debounceTimer = null;
+
+    function hideSuggestions() {
+        suggestionsBox.style.display = 'none';
+        suggestionsBox.innerHTML = '';
+    }
+
+    function renderSuggestions(companies) {
+        suggestionsBox.innerHTML = '';
+
+        if (!companies.length) {
+            hideSuggestions();
+            return;
+        }
+
+        companies.forEach(function (company) {
+            var item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'list-group-item list-group-item-action';
+            item.textContent = company.company_name;
+
+            item.addEventListener('click', function () {
+                companyInput.value = company.company_name;
+                websiteInput.value = company.website;
+                phoneInput.value   = company.phone;
+                addressInput.value = company.address;
+
+                matchNote.style.display = 'inline';
+                hideSuggestions();
+            });
+
+            suggestionsBox.appendChild(item);
+        });
+
+        suggestionsBox.style.display = 'block';
+    }
+
+    companyInput.addEventListener('input', function () {
+        var term = companyInput.value.trim();
+        matchNote.style.display = 'none';
+
+        if (debounceTimer) {
+            clearTimeout(debounceTimer);
+        }
+
+        if (term.length < 2) {
+            hideSuggestions();
+            return;
+        }
+
+        debounceTimer = setTimeout(function () {
+            fetch('/api/companies-search?q=' + encodeURIComponent(term))
+                .then(function (response) { return response.json(); })
+                .then(function (data) { renderSuggestions(data); })
+                .catch(function () { hideSuggestions(); });
+        }, 250);
+    });
+
+    // Click bahar kahin bhi ho to dropdown band ho jaaye
+    document.addEventListener('click', function (event) {
+        if (event.target !== companyInput && !suggestionsBox.contains(event.target)) {
+            hideSuggestions();
+        }
+    });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,150 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/companies.css') }}">
+
+<div class="companies-container">
+
+    <!-- FILTERS CARD -->
+    <div class="card mb-4 shadow-sm border-0">
+        <div class="card-body py-3">
+            <form method="GET">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <select name="sector" class="form-select">
+                            <option value="">All Sectors</option>
+                            {% for s in sectors %}
+                            <option value="{{ s[0] }}" {% if sector_filter==s[0] %}selected{% endif %}>
+                                {{ s[0] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <select name="industry" class="form-select">
+                            <option value="">All Industries</option>
+                            {% for i in industries %}
+                            <option value="{{ i[0] }}" {% if industry_filter==i[0] %}selected{% endif %}>
+                                {{ i[0] }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="Contacted" {% if status_filter=="Contacted" %}selected{% endif %}>Contacted
+                            </option>
+                            <option value="Interested" {% if status_filter=="Interested" %}selected{% endif %}>
+                                Interested</option>
+                            <option value="Rejected" {% if status_filter=="Rejected" %}selected{% endif %}>Rejected
+                            </option>
+                            <option value="Follow-Up Pending" {% if status_filter=="Follow-Up Pending" %}selected{%
+                                endif %}>Follow-Up Pending</option>
+                            <option value="Non Contacted" {% if status_filter=="Non Contacted" %}selected{% endif %}>Non
+                                Contacted</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 d-flex gap-2 align-items-center">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <a href="/companies" class="btn btn-danger">Clear Filter</a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="companies-card">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="companies-table-title">Listed Companies</h5>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-responsive">
+            <table class="companies-table">
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Sector</th>
+                        <th>Industry</th>
+                        <th>Website</th>
+                        <th>Total Executives</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for company in companies %}
+                    <tr>
+                        <td data-label="Company">{{ company.CompanyName }}</td>
+                        <td data-label="Sector">{{ company.Sector }}</td>
+                        <td data-label="Industry">{{ company.Industry }}</td>
+                        <td data-label="Website">
+                            <a href="{{ company.Website }}" target="_blank" class="website-link">
+                                Visit Website
+                            </a>
+                        </td>
+                        <td data-label="Total Executives">{{ company.total_executives }}</td>
+                        <td data-label="Status">
+                            {% if company.company_status == "Interested" %}
+                            <span class="badge bg-success">{{ company.company_status }}</span>
+                            {% elif company.company_status == "Follow-Up Pending" %}
+                            <span class="badge bg-warning text-dark">{{ company.company_status }}</span>
+                            {% elif company.company_status == "Rejected" %}
+                            <span class="badge bg-danger">{{ company.company_status }}</span>
+                            {% elif company.company_status == "Contacted" %}
+                            <span class="badge bg-primary">{{ company.company_status }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Non Contacted</span>
+                            {% endif %}
+                        </td>
+                        <td data-label="Action">
+                            <a href="/executives?company={{ company.CompanyName }}" class="view-btn">
+                                View Executives
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination-container">
+
+            {% if page > 1 %}
+            <a class="page-btn"
+                href="?page={{ page-1 }}&sector={{ sector_filter }}&industry={{ industry_filter }}&status={{ status_filter }}">Prev</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages+1) %}
+            {% if p >= page-2 and p <= page+2 %} {% if p==page %} <span class="page-btn active-page">{{ p }}</span>
+                {% else %}
+                <a class="page-btn"
+                    href="?page={{ p }}&sector={{ sector_filter }}&industry={{ industry_filter }}&status={{ status_filter }}">{{
+                    p }}</a>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %} <a class="page-btn"
+                    href="?page={{ page+1 }}&sector={{ sector_filter }}&industry={{ industry_filter }}&status={{ status_filter }}">
+                    Next</a>
+                    {% endif %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
